@@ -6,8 +6,24 @@ const fs = require('fs').promises;
 const path = require('path');
 require('dotenv').config();
 
+// Intelligence modules
+const TrendDetector = require('./intelligence/trend-detector');
+const RiskScorer = require('./intelligence/risk-scorer');
+const PersonalizationEngine = require('./intelligence/personalization-engine');
+const SmartReportGenerator = require('./intelligence/smart-report-generator');
+const DecisionEngine = require('./intelligence/decision-engine');
+const SafetyEngine = require('./intelligence/safety-engine');
+
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Initialize intelligence engines
+const trendDetector = new TrendDetector();
+const riskScorer = new RiskScorer();
+const personalizationEngine = new PersonalizationEngine();
+const smartReportGenerator = new SmartReportGenerator();
+const decisionEngine = new DecisionEngine();
+const safetyEngine = new SafetyEngine();
 
 // Middleware
 app.use(cors());
@@ -476,6 +492,210 @@ function getMostCommon(arr) {
   
   return mostCommon;
 }
+
+// ============================================
+// INTELLIGENCE ENDPOINTS (PHASE 3)
+// ============================================
+
+// POST /intelligence/analyze - Analyze user data for trends and risks
+app.post('/intelligence/analyze/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const userData = await loadUserData(userId);
+    
+    // Run intelligence analysis
+    const trends = trendDetector.analyzeTrends(userData);
+    const riskAssessment = riskScorer.calculateRiskScore(userData, trends);
+    const personalization = personalizationEngine.calculatePersonalizationScore(userData);
+    
+    res.json({
+      success: true,
+      analysis: {
+        trends,
+        risk_assessment: riskAssessment,
+        personalization
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// GET /intelligence/report/weekly - Generate weekly intelligence report
+app.get('/intelligence/report/weekly/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const userData = await loadUserData(userId);
+    
+    const report = smartReportGenerator.generateWeeklyReport(userData);
+    
+    res.json({
+      success: true,
+      report
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// GET /intelligence/report/monthly - Generate monthly intelligence report
+app.get('/intelligence/report/monthly/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const userData = await loadUserData(userId);
+    
+    const report = smartReportGenerator.generateMonthlyReport(userData);
+    
+    res.json({
+      success: true,
+      report
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// GET /intelligence/report/full - Generate full pregnancy intelligence report
+app.get('/intelligence/report/full/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const userData = await loadUserData(userId);
+    
+    const report = smartReportGenerator.generateFullReport(userData);
+    
+    res.json({
+      success: true,
+      report
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// POST /intelligence/action-plan - Generate prioritized action plan
+app.post('/intelligence/action-plan/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const userData = await loadUserData(userId);
+    
+    // Run analysis
+    const trends = trendDetector.analyzeTrends(userData);
+    const riskAssessment = riskScorer.calculateRiskScore(userData, trends);
+    const personalization = personalizationEngine.calculatePersonalizationScore(userData);
+    
+    // Generate action plan
+    const actionPlan = decisionEngine.generateActionPlan(
+      userData,
+      trends,
+      riskAssessment,
+      personalization
+    );
+    
+    res.json({
+      success: true,
+      action_plan: actionPlan
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// POST /intelligence/safety-check - Check message for safety concerns
+app.post('/intelligence/safety-check', async (req, res) => {
+  try {
+    const { message, response } = req.body;
+    
+    // Analyze message safety
+    const safetyAnalysis = safetyEngine.analyzeSafety(message);
+    
+    // Check response safety if provided
+    let responseSafety = null;
+    if (response) {
+      responseSafety = safetyEngine.checkResponseSafety(response);
+    }
+    
+    res.json({
+      success: true,
+      safety_analysis: safetyAnalysis,
+      response_safety: responseSafety
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// POST /intelligence/validate-response - Validate agent response before sending
+app.post('/intelligence/validate-response', async (req, res) => {
+  try {
+    const { user_message, agent_response } = req.body;
+    
+    const validation = safetyEngine.validateResponse(agent_response, user_message);
+    
+    res.json({
+      success: true,
+      validation
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// POST /intelligence/learn - Record learning data for personalization
+app.post('/intelligence/learn/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { suggestion_id, was_helpful, user_feedback } = req.body;
+    
+    const userData = await loadUserData(userId);
+    
+    // Add learning entry
+    if (!userData.learning_data) {
+      userData.learning_data = [];
+    }
+    
+    userData.learning_data.push({
+      id: uuidv4(),
+      timestamp: new Date().toISOString(),
+      suggestion_id,
+      was_helpful,
+      user_feedback: user_feedback || '',
+      week: userData.profile.current_week
+    });
+    
+    await saveUserData(userId, userData);
+    
+    res.json({
+      success: true,
+      message: 'Learning data recorded'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
 
 // ============================================
 // HEALTH CHECK

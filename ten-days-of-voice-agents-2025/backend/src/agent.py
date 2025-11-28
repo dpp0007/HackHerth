@@ -28,6 +28,7 @@ from notion_handler import NotionHandler
 from pregnancy_profile import PregnancyProfile
 from symptom_analyzer import SymptomAnalyzer
 from nutrition_engine import NutritionEngine
+from conversation_closer import ConversationCloser
 
 logger = logging.getLogger("agent")
 
@@ -108,6 +109,14 @@ TONE:
 - Never medical advice
 - Always supportive
 
+END-OF-CONVERSATION TASK ASSIGNMENT:
+When user says goodbye or thanks (e.g., "thank you", "thanks", "done", "got it", "okay thanks", "bye"):
+→ Call handle_conversation_end(user_message)
+→ This will assign ONE small pregnancy care task
+→ Sync to Todoist automatically
+→ Provide soft confirmation
+→ End conversation gracefully
+
 IMPORTANT: Call function tools when user provides information. Let the tools handle the logic.""",
         )
         
@@ -115,6 +124,7 @@ IMPORTANT: Call function tools when user provides information. Let the tools han
         self.pregnancy_profile = PregnancyProfile()
         self.symptom_analyzer = SymptomAnalyzer()
         self.nutrition_engine = NutritionEngine(self.pregnancy_profile)
+        self.conversation_closer = ConversationCloser()
         
         # Initialize pregnancy journal state
         self.journal_state = {
@@ -719,6 +729,153 @@ IMPORTANT: Call function tools when user provides information. Let the tools han
         except Exception as e:
             logger.error(f"❌ Error saving to Notion: {e}")
             return "I had trouble saving to Notion. Please try again later."
+
+    @function_tool()
+    async def handle_conversation_end(self, context: RunContext, user_message: str) -> str:
+        """
+        Handle end-of-conversation by assigning a small pregnancy care task.
+        This is automatically called when closure phrases are detected.
+        
+        Args:
+            user_message: The user's closing message (e.g., "thank you", "done")
+        """
+        logger.info(f"🔚 Handling conversation end: '{user_message}'")
+        
+        # Step 1: Detect if this is actually a closure
+        if not self.conversation_closer.detect_closure(user_message):
+            logger.info("Not a closure phrase, skipping task assignment")
+            return ""  # Not a closure, let normal flow continue
+        
+        # Step 2: Gather context for task selection
+        context_data = {
+            "emotional_state": self.journal_state.get("emotional_state"),
+            "symptoms": self.journal_state.get("symptoms", []),
+            "fatigue_level": self.journal_state.get("fatigue_level"),
+            "pregnancy_week": self.pregnancy_profile.profile.get("week")
+        }
+        
+        # Step 3: Select appropriate task
+        task = self.conversation_closer.select_task(
+            emotional_state=context_data["emotional_state"],
+            symptoms=context_data["symptoms"],
+            fatigue_level=context_data["fatigue_level"],
+            pregnancy_week=context_data["pregnancy_week"]
+        )
+        
+        # Step 4: Save task internally (to MongoDB/journal)
+        await self._save_closure_task(task, user_message, context_data)
+        
+        # Step 5: Sync to Todoist via MCP
+        todoist_success = await self._sync_task_to_todoist(task)
+        
+        # Step 6: Format confirmation message
+        confirmation = self.conversation_closer.format_confirmation(
+            task=task,
+            todoist_success=todoist_success
+        )
+        
+        # Step 7: Log the assignment
+        log_entry = self.conversation_closer.create_task_log_entry(
+            task=task,
+            todoist_success=todoist_success,
+            trigger_phrase=user_message,
+            context=context_data
+        )
+        
+        logger.info(f"✅ Conversation closure handled: Task assigned and logged")
+        
+        return confirmation
+    
+    async def _save_closure_task(
+        self,
+        task: str,
+        trigger_phrase: str,
+        context: dict
+    ) -> bool:
+        """
+        Save the closure task internally to pregnancy journal.
+        
+        Args:
+            task: The assigned task
+            trigger_phrase: The phrase that triggered closure
+            context: Context information
+            
+        Returns:
+            True if saved successfully
+        """
+        try:
+            # Ensure pregnancy_data directory exists
+            os.makedirs("pregnancy_data", exist_ok=True)
+            
+            # Load existing closure tasks log
+            closure_log_file = "pregnancy_data/closure_tasks.json"
+            closure_tasks = []
+            
+            if os.path.exists(closure_log_file):
+                try:
+                    with open(closure_log_file, 'r') as f:
+                        closure_tasks = json.load(f)
+                except Exception as e:
+                    logger.error(f"Error loading closure tasks: {e}")
+            
+            # Create entry
+            entry = {
+                "timestamp": datetime.now().isoformat(),
+                "task": task,
+                "trigger_phrase": trigger_phrase,
+                "context": context,
+                "pregnancy_week": self.pregnancy_profile.profile.get("week")
+            }
+            
+            # Append and save
+            closure_tasks.append(entry)
+            
+            with open(closure_log_file, 'w') as f:
+                json.dump(closure_tasks, f, indent=2)
+            
+            logger.info(f"💾 Closure task saved internally: {task}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to save closure task internally: {e}")
+            return False
+    
+    async def _sync_task_to_todoist(self, task: str) -> bool:
+        """
+        Sync the closure task to Todoist via MCP.
+        
+        Args:
+            task: The task to sync
+            
+        Returns:
+            True if sync succeeded, False otherwise
+        """
+        try:
+            # Get Todoist credentials
+            api_token = os.getenv("TODOIST_API_TOKEN")
+            project_id = os.getenv("TODOIST_PROJECT_ID")
+            
+            if not api_token:
+                logger.warning("⚠️ TODOIST_API_TOKEN not found, skipping Todoist sync")
+                return False
+            
+            # Initialize handler
+            handler = TodoistHandler(api_token, project_id)
+            
+            # Create task with pregnancy emoji
+            tasks = [f"🤰 {task}"]
+            result = await handler.create_tasks(tasks)
+            
+            if result['created'] > 0:
+                logger.info(f"✅ Task synced to Todoist: {task}")
+                return True
+            else:
+                logger.warning(f"⚠️ Todoist sync returned 0 created tasks")
+                return False
+                
+        except Exception as e:
+            logger.error(f"❌ Failed to sync task to Todoist: {e}")
+            return False
 
     def _get_latest_entry(self) -> dict:
         """Get the most recent pregnancy journal entry."""
