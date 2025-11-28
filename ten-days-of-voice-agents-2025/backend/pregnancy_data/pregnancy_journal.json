@@ -1,0 +1,21 @@
+[
+  {
+    "datetime": "2025-11-28T13:57:09.740172",
+    "pregnancy_week": null,
+    "trimester": null,
+    "emotional_state": "good",
+    "fatigue_level": "mid",
+    "symptoms": [],
+    "nutrition_notes": [
+      {
+        "query": "pickles",
+        "response": "I'm not sure about that specific food. When in doubt, check with your healthcare provider or a nutritionist.",
+        "timestamp": "2025-11-28T13:55:22.785877"
+      }
+    ],
+    "pregnancy_tasks": [
+      "exercise and being hydrated"
+    ],
+    "summary": "Week N/A: Feeling good, mid energy. Tasks: exercise and being hydrated"
+  }
+]

@@ -1,0 +1,46 @@
+{
+  "safe_foods": {
+    "trimester_1": [
+      {"name": "Ginger tea", "benefit": "Helps with nausea", "allergens": []},
+      {"name": "Crackers", "benefit": "Settles stomach", "allergens": ["gluten"]},
+      {"name": "Bananas", "benefit": "Easy to digest, potassium", "allergens": []},
+      {"name": "Yogurt", "benefit": "Probiotics, calcium", "allergens": ["dairy", "lactose"]},
+      {"name": "Oatmeal", "benefit": "Fiber, energy", "allergens": ["gluten"]},
+      {"name": "Eggs", "benefit": "Protein, choline", "allergens": ["eggs"]},
+      {"name": "Spinach", "benefit": "Folate, iron", "allergens": []},
+      {"name": "Sweet potatoes", "benefit": "Vitamin A, fiber", "allergens": []}
+    ],
+    "trimester_2": [
+      {"name": "Salmon", "benefit": "Omega-3, DHA", "allergens": ["fish"]},
+      {"name": "Lentils", "benefit": "Protein, iron", "allergens": []},
+      {"name": "Almonds", "benefit": "Healthy fats, vitamin E", "allergens": ["nuts"]},
+      {"name": "Greek yogurt", "benefit": "Protein, calcium", "allergens": ["dairy", "lactose"]},
+      {"name": "Berries", "benefit": "Antioxidants, vitamin C", "allergens": []},
+      {"name": "Avocado", "benefit": "Healthy fats, folate", "allergens": []},
+      {"name": "Chicken breast", "benefit": "Lean protein", "allergens": []},
+      {"name": "Quinoa", "benefit": "Complete protein, iron", "allergens": []}
+    ],
+    "trimester_3": [
+      {"name": "Dates", "benefit": "May help with labor", "allergens": []},
+      {"name": "Leafy greens", "benefit": "Vitamin K, calcium", "allergens": []},
+      {"name": "Whole grain bread", "benefit": "Fiber, prevents constipation", "allergens": ["gluten"]},
+      {"name": "Milk", "benefit": "Calcium for baby's bones", "allergens": ["dairy", "lactose"]},
+      {"name": "Red meat", "benefit": "Iron, prevents anemia", "allergens": []},
+      {"name": "Oranges", "benefit": "Vitamin C, hydration", "allergens": []},
+      {"name": "Walnuts", "benefit": "Omega-3, brain development", "allergens": ["nuts"]},
+      {"name": "Beans", "benefit": "Protein, fiber", "allergens": []}
+    ]
+  },
+  "foods_to_avoid": [
+    "Raw fish (sushi)",
+    "Unpasteurized cheese",
+    "Deli meats (unless heated)",
+    "Raw eggs",
+    "High-mercury fish (shark, swordfish)",
+    "Alcohol",
+    "Excessive caffeine (>200mg/day)",
+    "Raw sprouts",
+    "Unwashed produce"
+  ],
+  "emergency_allergens": ["peanuts", "shellfish", "severe_dairy"]
+}

@@ -1,0 +1,4 @@
+# This directory stores pregnancy-related data
+# Files created at runtime:
+# - profile.json (user pregnancy profile)
+# - pregnancy_journal.json (daily journal entries)

@@ -1,0 +1,67 @@
+{
+  "weeks": {
+    "1-4": {
+      "trimester": 1,
+      "baby_size": "Poppy seed to lentil",
+      "key_developments": "Implantation, neural tube forming",
+      "common_symptoms": ["Missed period", "Light spotting", "Mild cramping"],
+      "tips": ["Start prenatal vitamins", "Avoid alcohol", "Schedule first appointment"]
+    },
+    "5-8": {
+      "trimester": 1,
+      "baby_size": "Sesame seed to raspberry",
+      "key_developments": "Heart beating, limbs forming",
+      "common_symptoms": ["Morning sickness", "Fatigue", "Breast tenderness"],
+      "tips": ["Eat small frequent meals", "Rest when tired", "Stay hydrated"]
+    },
+    "9-13": {
+      "trimester": 1,
+      "baby_size": "Cherry to lemon",
+      "key_developments": "All organs formed, fingers and toes",
+      "common_symptoms": ["Nausea improving", "Frequent urination", "Mood swings"],
+      "tips": ["First trimester screening", "Gentle exercise", "Emotional support"]
+    },
+    "14-17": {
+      "trimester": 2,
+      "baby_size": "Peach to avocado",
+      "key_developments": "Moving, hearing developing",
+      "common_symptoms": ["Energy returning", "Baby bump showing", "Skin changes"],
+      "tips": ["Enjoy energy boost", "Start maternity clothes", "Connect with baby"]
+    },
+    "18-22": {
+      "trimester": 2,
+      "baby_size": "Bell pepper to banana",
+      "key_developments": "Feeling kicks, gender visible",
+      "common_symptoms": ["Feeling movement", "Back pain", "Leg cramps"],
+      "tips": ["Anatomy scan", "Prenatal yoga", "Sleep on left side"]
+    },
+    "23-27": {
+      "trimester": 2,
+      "baby_size": "Grapefruit to cauliflower",
+      "key_developments": "Eyes opening, brain developing",
+      "common_symptoms": ["Heartburn", "Braxton Hicks", "Swelling"],
+      "tips": ["Glucose screening", "Stay active", "Prepare nursery"]
+    },
+    "28-31": {
+      "trimester": 3,
+      "baby_size": "Eggplant to coconut",
+      "key_developments": "Gaining weight, lungs maturing",
+      "common_symptoms": ["Shortness of breath", "Frequent urination", "Fatigue"],
+      "tips": ["Weekly checkups start", "Birth plan", "Hospital bag"]
+    },
+    "32-36": {
+      "trimester": 3,
+      "baby_size": "Squash to honeydew",
+      "key_developments": "Head down position, practicing breathing",
+      "common_symptoms": ["Pelvic pressure", "Trouble sleeping", "Nesting"],
+      "tips": ["Childbirth classes", "Finalize plans", "Rest when possible"]
+    },
+    "37-40": {
+      "trimester": 3,
+      "baby_size": "Watermelon",
+      "key_developments": "Full term, ready for birth",
+      "common_symptoms": ["Contractions", "Water breaking", "Excitement"],
+      "tips": ["Watch for labor signs", "Stay calm", "You're almost there!"]
+    }
+  }
+}

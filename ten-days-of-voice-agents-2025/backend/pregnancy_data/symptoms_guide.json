@@ -1,0 +1,34 @@
+{
+  "emergency_keywords": [
+    "bleeding", "heavy bleeding", "blood", "hemorrhage",
+    "fainting", "fainted", "passed out", "unconscious",
+    "severe pain", "intense pain", "unbearable pain",
+    "swelling", "sudden swelling", "face swelling", "hand swelling",
+    "shortness of breath", "can't breathe", "difficulty breathing",
+    "severe headache", "vision changes", "blurred vision",
+    "high fever", "fever above 101", "chills",
+    "contractions", "regular contractions", "water broke"
+  ],
+  "common_symptoms": {
+    "trimester_1": [
+      {"symptom": "nausea", "response": "Very common in first trimester. Try ginger tea, small frequent meals, and crackers before getting up."},
+      {"symptom": "fatigue", "response": "Your body is working hard! Rest when you can, take short naps, and don't push yourself."},
+      {"symptom": "breast tenderness", "response": "Normal hormonal change. A supportive bra can help with comfort."},
+      {"symptom": "frequent urination", "response": "Common as your uterus grows. Stay hydrated but limit fluids before bed."},
+      {"symptom": "mood swings", "response": "Hormones are adjusting. Be gentle with yourself and talk about your feelings."}
+    ],
+    "trimester_2": [
+      {"symptom": "back pain", "response": "Your center of gravity is shifting. Try prenatal yoga, good posture, and supportive shoes."},
+      {"symptom": "leg cramps", "response": "Stay hydrated, stretch before bed, and ensure you're getting enough magnesium."},
+      {"symptom": "heartburn", "response": "Eat smaller meals, avoid spicy foods, and don't lie down right after eating."},
+      {"symptom": "constipation", "response": "Increase fiber, drink plenty of water, and stay active with gentle walks."}
+    ],
+    "trimester_3": [
+      {"symptom": "shortness of breath", "response": "Baby is pressing on your diaphragm. Practice good posture and take breaks when needed."},
+      {"symptom": "swelling", "response": "Some swelling is normal. Elevate feet, stay hydrated. If sudden or severe, contact your doctor."},
+      {"symptom": "braxton hicks", "response": "Practice contractions. They're irregular and usually painless. Stay hydrated and rest."},
+      {"symptom": "trouble sleeping", "response": "Try a pregnancy pillow, sleep on your left side, and establish a bedtime routine."}
+    ]
+  },
+  "escalation_message": "⚠️ This sounds like something you should discuss with your healthcare provider right away. If you're experiencing severe symptoms, please call your doctor or go to the emergency room. Your health and baby's health come first."
+}
