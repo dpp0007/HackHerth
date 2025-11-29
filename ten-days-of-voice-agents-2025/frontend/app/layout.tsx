@@ -54,15 +54,15 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       className={cn(
         publicSans.variable,
         commitMono.variable,
-        'dark scroll-smooth font-sans antialiased'
+        'scroll-smooth font-sans antialiased'
       )}
     >
       <head>
-        {styles && <style>{styles}</style>}
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
       </head>
-      <body className="overflow-x-hidden">
+      <body className="overflow-x-hidden" suppressHydrationWarning>
+        {styles && <style dangerouslySetInnerHTML={{ __html: styles }} />}
         {children}
       </body>
     </html>
